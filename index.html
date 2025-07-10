@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For Butkii ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+    .swiper-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .text {
+      font-size: 24px;
+      text-align: center;
+      margin: 20px 0;
+      line-height: 1.6;
+    }
+    img.sticker {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      grid-gap: 10px;
+      justify-content: center;
+    }
+    .card {
+      width: 60px;
+      height: 60px;
+      background-color: #fff;
+      color: black;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .card.flipped {
+      background-color: #ffb6c1;
+    }
+    .final-message {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="swiper">
+    <div class="swiper-wrapper"><div class="swiper-slide">
+    <img src="Start.png" class="sticker" alt="Start Sticker">
+    <div class="text">Hii Butkii 🐱</div>
+    <button onclick="swiper.slideNext()">Swipe ➡️</button>
+  </div>
+
+  <div class="swiper-slide">
+    <img src="Middle.png" class="sticker" alt="Middle Sticker">
+    <div class="text">Kesa h Betu 😘</div>
+    <button onclick="swiper.slideNext()">Swipe ➡️</button>
+  </div>
+
+  <div class="swiper-slide">
+    <div class="text">There is a surprise for you 🎁</div>
+    <button onclick="swiper.slideNext()">Play Game 🎮</button>
+  </div>
+
+  <div class="swiper-slide">
+    <div class="text">❤️ Match the Hearts ❤️</div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="final-message" id="finalMessage"></div>
+  </div>
+
+  <div class="swiper-slide">
+    <img src="End.png" class="sticker" alt="End Sticker">
+    <div class="text">
+      I love you babe... ❤️<br>
+      You are a strong bacchu... 💪<br>
+      I'm always with you... 🤗<br><br>
+      🌙 Jab bhi thak jaaye dil... main hoon na tere paas, hamesha! 💖
+    </div>
+  </div>
+
+</div>
+
+  </div>  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>  <script>
+    const swiper = new Swiper('.swiper', {
+      direction: 'horizontal',
+      loop: false,
+    });
+
+    const emojis = ["❤️", "💖", "💕", "💘", "💗", "💓", "💞", "💝"];
+    const doubledEmojis = [...emojis, ...emojis];
+    const shuffled = doubledEmojis.sort(() => 0.5 - Math.random());
+
+    const board = document.getElementById("gameBoard");
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matched = 0;
+
+    shuffled.forEach((emoji, index) => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.dataset.emoji = emoji;
+      card.addEventListener("click", () => {
+        if (lockBoard || card.classList.contains("flipped")) return;
+
+        card.textContent = emoji;
+        card.classList.add("flipped");
+
+        if (!firstCard) {
+          firstCard = card;
+        } else {
+          secondCard = card;
+          lockBoard = true;
+
+          if (firstCard.dataset.emoji === secondCard.dataset.emoji) {
+            matched++;
+            resetFlip();
+            if (matched === emojis.length) {
+              document.getElementById("finalMessage").innerHTML = "<br>✨ You did it! 💖 Swipe to see the surprise! ✨";
+            }
+          } else {
+            setTimeout(() => {
+              firstCard.textContent = "";
+              secondCard.textContent = "";
+              firstCard.classList.remove("flipped");
+              secondCard.classList.remove("flipped");
+              resetFlip();
+            }, 1000);
+          }
+        }
+      });
+      board.appendChild(card);
+    });
+
+    function resetFlip() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+  </script></body>
